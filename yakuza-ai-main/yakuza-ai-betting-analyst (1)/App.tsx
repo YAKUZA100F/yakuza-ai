@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect, useRef } from 'react';
 import { fetchOddsByLeague, fetchTeamNews, searchMatchAssets, LEAGUES_DATA } from './services/api';
 import { analyzeMatches } from './services/gemini';
@@ -217,10 +218,11 @@ const App: React.FC = () => {
         searchMatchAssets(`${match.home_team} vs ${match.away_team}`)
       ]);
       const res = await analyzeMatches([match], { [match.id]: news });
-      if (res) {
+      // Extract the first analysis result from the array returned by Gemini
+      if (res && res.length > 0) {
         setAnalysisResult({ 
           matchName: `${match.home_team} vs ${match.away_team}`, 
-          data: res, 
+          data: res[0], 
           imageUrl: assets?.imageUrl || `https://images.unsplash.com/photo-1508098682722-e99c43a406b2?q=80&w=800&auto=format&fit=crop`, 
           sofascoreLink: assets?.link || 'https://www.sofascore.com'
         });
